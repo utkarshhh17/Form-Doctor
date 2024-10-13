@@ -54,14 +54,15 @@ export default function Login(){
         setError('')         
         e.preventDefault();
            
-        axios.post('http://localhost:8000/login', loginData)
+        axios.post('http://localhost:8081/login', loginData)
         .then((response) => {               
             
             const json=response.data;
             if (response.status === 200) {
                 setLoginData({email:'',password:''});
-                        
-                localStorage.setItem('user', JSON.stringify(json))                       
+                const userData=JSON.stringify(json);
+                console.log(userData);
+                localStorage.setItem('doctor-user', userData)                       
                 dispatch({type: 'LOGIN', payload: json})
                 // console.log(response.data.token);
                 navigate("/");
