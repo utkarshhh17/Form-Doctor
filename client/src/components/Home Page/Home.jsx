@@ -2,20 +2,48 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import ImageSlider from "./ImageSlider";
-import axios from "axios";
+
+// import jwtDecode from "jwt-decode";
 import Nav from "../Nav/Nav";
 
 export default function Home(){
-    const {user}=useAuthContext()
+    const {user, dispatch}=useAuthContext()
     const navigate=useNavigate();
+
+    // const isTokenExpired = (token) => {
+    //     try {
+    //         const decodedToken = jwtDecode(token);
+    //         return Date.now() >= decodedToken.exp * 1000; // Check if token is expired
+    //     } catch (error) {
+    //         console.error("Invalid token:", error);
+    //         return true; // Treat invalid token as expired
+    //     }
+    // };
+
+    // const handleLogOut=()=>{
+    //     localStorage.removeItem('doctor-user');
+    //     dispatch({type:'LOGOUT'});
+    //     navigate("/login")
+
+    // }
 
     useEffect(() => {
         if (!user) {
             navigate("/login")
         } 
+        // else {
+        //     const token = localStorage.getItem("jwt");
+        //     if (!token || isTokenExpired(token)) {
+        //         console.log("Token expired or missing, logging out.");
+        //         handleLogOut(); // Clear data and logout
+               
+        //     }
+        // }
     }, []);
 
+   
 
+   
 
 
     

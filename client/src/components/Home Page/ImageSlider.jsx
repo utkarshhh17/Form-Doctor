@@ -7,11 +7,7 @@ export default function ImageSlider(){
     const {user}=useAuthContext()
     const navigate=useNavigate();
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         navigate("/login")
-    //     } 
-    // }, []);
+ 
 
     const fallbackImages = [
         { url: "https://via.placeholder.com/800x400/ff7f7f/333333?text=Slide+1" },
@@ -21,10 +17,11 @@ export default function ImageSlider(){
 
     const [images, setImages] = useState(fallbackImages); 
 
+   
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await axios.get("http://localhost:8081/images"); // Adjust the URL based on your backend
+                const response = await axios.get("http://localhost:8081/api/details", { headers: {"Authorization" : `Bearer ${user}`} }); // Adjust the URL based on your backend
                 if (response.data && response.data.length > 0) {
                     setImages(response.data);
                 }
@@ -32,7 +29,7 @@ export default function ImageSlider(){
                 console.error("Failed to fetch images, using fallback images", error);
             }
         };
-
+        console.log(user)
         fetchImages();
     }, []);
 
