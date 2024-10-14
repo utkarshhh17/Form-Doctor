@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import ImageSlider from "./ImageSlider";
-
+import axios from "axios";
 // import jwtDecode from "jwt-decode";
 import Nav from "../Nav/Nav";
 
@@ -20,12 +20,7 @@ export default function Home(){
     //     }
     // };
 
-    // const handleLogOut=()=>{
-    //     localStorage.removeItem('doctor-user');
-    //     dispatch({type:'LOGOUT'});
-    //     navigate("/login")
-
-    // }
+  
 
     useEffect(() => {
         if (!user) {
@@ -52,6 +47,7 @@ export default function Home(){
     const [doctorInput, setDoctorInput]=useState({'Breed':'','Breed Grade':'','BCS':'','Cleft':'', 'Horn':'', 
     'Skin Coat':'', 'Teat Score':'', 'Udder Type':'', 'Worm Load':'', 'Wound':'', 'Disease':'',})
     
+    const [userMediaDetailsId, setUserMediaDetailsId]=useState('');
 
 
     const handleInputChange = (e) => {
@@ -78,30 +74,30 @@ export default function Home(){
             setErrorMessage('BCS must be a number between 1 and 5, and divisible by 0.25');
             return; // Prevent form submission if validation fails
         }
-        console.log(doctorInput); // To check the form data in console
-
+        const data={userMediaDetailsId:userMediaDetailsId, reportData:`${doctorInput}`, doctorId:1}
+        console.log(data)
         // Send the data to the backend using axios
-        // axios.post('http://localhost:8081/form', doctorInput)
-        //     .then(response => {
-        //         console.log('Form data submitted successfully:', response);
+        axios.post('http://localhost:8081/api/report', data, { headers: {"Authorization" : `Bearer ${user}`} })
+            .then(response => {
+                console.log('Form data submitted successfully:', response);
 
-        //         setDoctorInput({
-        //             Breed: '',
-        //             'Breed Grade': '',
-        //             BCS: '',
-        //             Cleft: '',
-        //             Horn: '',
-        //             'Skin Coat': '',
-        //             'Teat Score': '',
-        //             'Udder Type': '',
-        //             'Worm Load': '',
-        //             Wound: '',
-        //             Disease: ''
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.error('Error submitting form data:', error);
-        //     });
+                setDoctorInput({
+                    Breed: '',
+                    'Breed Grade': '',
+                    BCS: '',
+                    Cleft: '',
+                    Horn: '',
+                    'Skin Coat': '',
+                    'Teat Score': '',
+                    'Udder Type': '',
+                    'Worm Load': '',
+                    Wound: '',
+                    Disease: ''
+                });
+            })
+            .catch(error => {
+                console.error('Error submitting form data:', error);
+            });
     };
    
     useEffect(()=>{
@@ -114,7 +110,7 @@ export default function Home(){
        
             <div className="flex w-full mt-10 overflow-y-hidden">
                 
-                <ImageSlider />
+                <ImageSlider setUserMediaDetailsId={setUserMediaDetailsId}/>
 
                 <div className="flex flex-col w-[38%] p-4 pl-8 ml-3 h-[90vh] overflow-y-scroll border-gray border-[1px] ">
                     <div className="text-3xl self-center">Details</div>

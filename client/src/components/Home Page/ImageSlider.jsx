@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
-export default function ImageSlider(){
+export default function ImageSlider({setUserMediaDetailsId}){
     const {user}=useAuthContext()
     const navigate=useNavigate();
 
@@ -32,7 +32,7 @@ export default function ImageSlider(){
                 if (response.data) {
                     const json=response.data
                     console.log(response.data)
-
+                    setUserMediaDetailsId(json.userMediaDetailsId);
 
                    setImages((prevImages) => [
                     { url: json.imageS3Path },
