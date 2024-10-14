@@ -24,20 +24,28 @@ export default function ImageSlider(){
             if (!user) {
             console.error("No user or token found");
             return;
-        }
+            }
 
             try {
-                const response = await axios.get("http://localhost:8081/api/details", { headers: {"Authorization" : `Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzaW5naHNocmV5YXNoMDA3NUBnbWFpbC5jb20iLCJpYXQiOjE3Mjg4Mzg5MzEsImV4cCI6MTcyODk0NjkzMX0.4-w7L9meODtpZmmJjslDDlvEONeG28ZNCbJ2iudJd88VxQRxjuljY76p-tf0o5X0`} });
-                console.log(response.data)// Adjust the URL based on your backend
-                if (response.data && response.data.length > 0) {
+                const response = await axios.get("http://localhost:8081/api/details", { headers: {"Authorization" : `Bearer ${user}`} });
+               
+                if (response.data) {
+                    const json=response.data
                     console.log(response.data)
-                    setImages(response.data);
+
+
+                   setImages((prevImages) => [
+                    { url: json.imageS3Path },
+                    ...prevImages.slice(1),
+                ]);
+
+                console.log(images);
                 }
             } catch (error) {
                 console.error("Failed to fetch images, using fallback images", error);
             }
         };
-        console.log(user)
+     
         fetchImages();
     }, []);
 
