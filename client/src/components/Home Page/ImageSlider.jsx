@@ -3,85 +3,64 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
-export default function ImageSlider({setUserMediaDetailsId}){
-    const {user}=useAuthContext()
-    const navigate=useNavigate();
 
- 
-
-    const fallbackImages = [
-        { url: "https://via.placeholder.com/800x400/ff7f7f/333333?text=Slide+1" },
-        { url: "https://via.placeholder.com/800x400/7f7fff/333333?text=Slide+2" },
-        { url: "https://via.placeholder.com/800x400/7f7fff/333333?text=Slide+3" },
-    ];
-
-    const [images, setImages] = useState(fallbackImages); 
-
-   
-    useEffect(() => {
-        const fetchImages = async () => {
-
-            if (!user) {
-            console.error("No user or token found");
-            return;
-            }
-
-            try {
-                const response = await axios.get("http://localhost:8081/api/details", { headers: {"Authorization" : `Bearer ${user}`} });
-               
-                if (response.data) {
-                    const json=response.data
-                    console.log(response.data)
-                    setUserMediaDetailsId(json.userMediaDetailsId);
-
-                   setImages((prevImages) => [
-                    { url: json.imageS3Path },
-                    ...prevImages.slice(1),
-                ]);
-
-                console.log(images);
-                }
-            } catch (error) {
-                console.error("Failed to fetch images, using fallback images", error);
-            }
-        };
-     
-        fetchImages();
-    }, []);
-
+export default function ImageSlider({images}){
 
 
     const [currentIndex, setCurrentIndex]=useState(0);
 
-    
+    useEffect(() => {
+        console.log(images);
+    }, []);
 
-    const slideStyle={
-        backgroundImage:`url(${images[currentIndex].url})`,
-        backgroundPosition:"center",
-        backgroundSize:"contain",
-        backgroundRepeat:"no-repeat"
-
+    const imgSliderImg={
+        maxWidth:'90%'
     }
 
-    const leftArrowStyles={
-        position:'relative',
-        top:'42%',
-        left:'3rem',
-        cursor:'pointer',
+    const leftArrowStyles = {
+        position: 'relative',
+        top: '38%',
+        left: '0rem',
+        cursor: 'pointer',
         
-        fontSize:'4rem',
-        color:'white'
-        
-    }
+        fontSize: '3rem',
+        color: 'white',
+        backgroundColor: 'black',
+      
+        height: '5rem',
+        width: '3rem',  // Ensuring it's a square
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      
+        lineHeight: '0', // Matches text height with the container
+        boxSizing: 'border-box', // Ensures padding doesn’t affect size
+        padding: '0', // Reset any extra padding
+        textAlign: 'center',
+        borderRadius: '10%', // Optional: Makes the background circular
+      };
 
     const rightArrowStyles={
         position:'relative',
         top:'42%',
-        right:'3rem',
+        right:'0rem',
         cursor:'pointer',
         
-        fontSize:'4rem',
-        color:'white'
+        fontSize: '3rem',
+        color: 'white',
+        backgroundColor: 'black',
+      
+        height: '5rem',
+        width: '3rem',  // Ensuring it's a square
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      
+        lineHeight: '0', // Matches text height with the container
+        boxSizing: 'border-box', // Ensures padding doesn’t affect size
+        padding: '0', // Reset any extra padding
+        textAlign: 'center',
+        borderRadius: '10%', // Optional: Makes the background circular
     }
     const goToPrev=()=>{
         const isFirstSlide=currentIndex===0
@@ -106,10 +85,7 @@ export default function ImageSlider({setUserMediaDetailsId}){
         <div className="flex w-[60%] h-[58vh] mt-10">
             <div style={leftArrowStyles} onClick={goToPrev}>{'<'}</div>
 
-            <div className="w-full border-[2px] border-gray-400" style={slideStyle}>
-            
-            </div>
-
+            <img src={images[currentIndex].url} width='auto' height='auto' style={imgSliderImg}/>
             <div style={rightArrowStyles} onClick={goToNext}>{'>'}</div>
             
 
