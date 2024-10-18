@@ -74,7 +74,7 @@ export default function Home(){
    
 
     const [doctorInput, setDoctorInput]=useState({'Type of Animal':'', 'Breed':'','Breed Grade':'','BCS':'','Cleft':'', 'Horn':'', 
-    'Skin Coat':'', 'Teat Score':'', 'Udder Type':'', 'Worm Load':'', 'Wound':'', 'Disease':'',})
+    'Skin Coat':'', 'Teat Score':'', 'Udder Type':'', 'Worm Load':'', 'Wound':'',})
     
     const [userMediaDetailsId, setUserMediaDetailsId]=useState('');
 
@@ -121,7 +121,7 @@ export default function Home(){
                     'Udder Type': '',
                     'Worm Load': '',
                     Wound: '',
-                    Disease: ''
+                
                 });
 
                 fetchImages();
