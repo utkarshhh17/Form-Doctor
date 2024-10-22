@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+// import { useAuthContext } from "../../hooks/useAuthContext";
+// import { useNavigate, Link } from "react-router-dom";
+// import axios from "axios";
 
 
 export default function ImageSlider({images}){
@@ -9,9 +9,7 @@ export default function ImageSlider({images}){
 
     const [currentIndex, setCurrentIndex]=useState(0);
 
-    useEffect(() => {
-        console.log(images);
-    }, []);
+
 
     const imgSliderImg={
         maxWidth:'90%'
@@ -42,7 +40,7 @@ export default function ImageSlider({images}){
 
     const rightArrowStyles={
         position:'relative',
-        top:'42%',
+        top:'38%',
         right:'0rem',
         cursor:'pointer',
         
@@ -76,9 +74,6 @@ export default function ImageSlider({images}){
         setCurrentIndex(newIndex);
 
     }
-    useEffect(()=>{
-
-    })
 
     return (
 

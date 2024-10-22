@@ -91,11 +91,19 @@ export default function Home(){
         e.preventDefault(); // Prevent form refresh on submit
         setErrorMessage('');
         
+        const emptyFields = []; // Array to store empty field names
+
+        // Loop through the `doctorInput` object to find empty fields
         for (let key in doctorInput) {
             if (!doctorInput[key]) {
-                setErrorMessage(`Please fill in all the fields. Missing: ${key}`);
-                return; // Prevent form submission if validation fails
+            emptyFields.push(key); // Add empty field names to the array
             }
+        }
+
+        if (emptyFields.length > 0) {
+            // Create an error message with the list of empty fields
+            alert(`Please fill in all the fields. Missing: ${emptyFields.join(', ')}`);
+            return; // Prevent form submission if validation fails
         }
 
         const bcsValue = parseFloat(doctorInput.BCS);
@@ -111,16 +119,17 @@ export default function Home(){
                 console.log('Form data submitted successfully:', response);
 
                 setDoctorInput({
-                    Breed: '',
+                    'Type of Animal':'',
+                    'Breed': '',
                     'Breed Grade': '',
-                    BCS: '',
-                    Cleft: '',
-                    Horn: '',
+                    'BCS': '',
+                    'Cleft': '',
+                    'Horn': '',
                     'Skin Coat': '',
                     'Teat Score': '',
                     'Udder Type': '',
                     'Worm Load': '',
-                    Wound: '',
+                    'Wound': '',
                 
                 });
 
