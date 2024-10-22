@@ -21,9 +21,11 @@ public class JwtService {
 
 
 
-    public String generateToken(String email) {
+    public String generateToken(String email, Long id) {
 
         Map<String, Object> claim = new HashMap<>();
+        claim.put("doctorId", id);
+
 
         return Jwts
                 .builder()
@@ -50,6 +52,10 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
+
+//    public Long extractDoctorId(String token) {
+//        return extractClaim(token, claims -> (Long) claims.get("doctorId"));
+//    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()

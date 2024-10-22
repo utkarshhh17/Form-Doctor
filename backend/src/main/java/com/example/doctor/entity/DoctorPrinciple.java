@@ -28,6 +28,8 @@ public class DoctorPrinciple implements UserDetails {
         return doctor.getEmail();
     }
 
+    public Long getId(){ return doctor.getId();}
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

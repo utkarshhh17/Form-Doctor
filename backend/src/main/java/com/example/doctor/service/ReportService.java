@@ -38,7 +38,11 @@ public class ReportService {
     }
 
 
-    public DoctorSpecifiedData createNewReport(DoctorSpecifiedData doctorSpecifiedData){
+    public DoctorSpecifiedData createNewReport(DoctorSpecifiedData doctorSpecifiedData) {
+        boolean reportExists = checkReportAlreadyExists(doctorSpecifiedData.getUserMediaDetailsId());
+        if(reportExists){
+            return null;
+        }
         return doctorSpecifiedDataRepository.save(doctorSpecifiedData);
     }
 
