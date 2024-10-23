@@ -78,10 +78,10 @@ export default function ImageSlider({images}){
     return (
 
         <div className="flex w-[60%] h-[58vh] mt-10">
-            <div style={leftArrowStyles} onClick={goToPrev}>{'<'}</div>
+            <button style={leftArrowStyles} onClick={goToPrev}>{'<'}</button>
 
             <img src={images[currentIndex].url} width='auto' height='auto' style={imgSliderImg}/>
-            <div style={rightArrowStyles} onClick={goToNext}>{'>'}</div>
+            <button style={rightArrowStyles} onClick={goToNext}>{'>'}</button>
             
 
 

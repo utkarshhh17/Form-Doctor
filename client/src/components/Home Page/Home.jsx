@@ -87,30 +87,46 @@ export default function Home(){
         }));
     };
 
+    const [showPopup, setShowPopup] = useState("")
+    const [popupError, setPopupError]=useState("")
+    const [canProceed, setCanProceed] = useState(false); // To check if user can proceed
+
+
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent form refresh on submit
         setErrorMessage('');
         
-        const emptyFields = []; // Array to store empty field names
+        if(!canProceed){
+            const emptyFields = []; // Array to store empty field names
 
-        // Loop through the `doctorInput` object to find empty fields
-        for (let key in doctorInput) {
-            if (!doctorInput[key]) {
-            emptyFields.push(key); // Add empty field names to the array
+            // Loop through the `doctorInput` object to find empty fields
+            for (let key in doctorInput) {
+                if (!doctorInput[key]) {
+                emptyFields.push(key); // Add empty field names to the array
+                }
+            }
+
+            if (emptyFields.length > 0) {
+                // Create an error message with the list of empty fields
+                setPopupError(`Please fill in all the fields. Missing Fields: ${emptyFields.join(', ')}. If you still wish to submit, Click OK`);
+                setShowPopup("Empty"); // Show the popup
+                return; // Prevent form submission if validation fails
+            }
+
+            const bcsValue = parseFloat(doctorInput.BCS);
+            if (isNaN(bcsValue) || bcsValue < 1 || bcsValue > 5 || (bcsValue % 0.25 !== 0)) {
+                setErrorMessage('BCS must be a number between 1 and 5, and divisible by 0.25');
+                return; // Prevent form submission if validation fails
             }
         }
 
-        if (emptyFields.length > 0) {
-            // Create an error message with the list of empty fields
-            alert(`Please fill in all the fields. Missing: ${emptyFields.join(', ')}`);
-            return; // Prevent form submission if validation fails
-        }
 
-        const bcsValue = parseFloat(doctorInput.BCS);
-        if (isNaN(bcsValue) || bcsValue < 1 || bcsValue > 5 || (bcsValue % 0.25 !== 0)) {
-            setErrorMessage('BCS must be a number between 1 and 5, and divisible by 0.25');
-            return; // Prevent form submission if validation fails
-        }
+        
+
+
+
+
+
         const data={userMediaDetailsId:userMediaDetailsId, reportData:`${doctorInput}`, doctorId:1}
         console.log(data)
         // Send the data to the backend using axios
@@ -132,21 +148,84 @@ export default function Home(){
                     'Wound': '',
                 
                 });
-
-                fetchImages();
+                setCanProceed(false)
+                setShowPopup("Success")
+                
             })
             .catch(error => {
-                console.error('Error submitting form data:', error);
+
+                setPopupError('Error submitting form data:', error);
+                setShowPopup("Error")
             });
     };
-   
-    useEffect(()=>{
 
-    })
+    const handlePopupEmptyOk = () => {
+        setShowPopup(''); // Hide the popup
+        setPopupError('')
+        setCanProceed(true); // Allow the form to proceed after the popup is closed
+        handleSubmit(new Event('submit')); // Trigger form submission
+      };
+
+      const handlePopupSuccess = () => {
+        fetchImages();
+        setShowPopup(''); // Hide the popup
+        
+      };
+
+      const handlePopupError = () => {
+       
+        setShowPopup(''); // Hide the popup
+        
+      };
+   
 
     return (
         <div className="flex flex-col">
             <Nav />
+            {showPopup==="Empty" && 
+                <div className="fixed w-full top-40">
+                    <div className="m-auto flex flex-col w-[20vw] bg-white border-black border-[1px]">
+                        <div className="w-full bg-[#56754b] flex justify-center text-white p-1 text-xl"> Alert</div>
+
+                        <div className="p-1 text-red-500 text-lg">{popupError}</div>
+
+                        <div className="flex justify-between p-2">
+                            <button className="ml-4 text-white bg-red-500 h-10 border-[0.5px] p-2 rounded-lg shadow-xl hover:scale-105" onClick={()=>{setShowPopup(false); setPopupError('')}}>Cancel</button>
+                            <button className="mr-4 bg-green-400  h-10 border-[0.5px] p-2 px-4 hover:scale-105 rounded-lg shadow-xl" onClick={()=>handlePopupEmptyOk()}>OK</button>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+            {showPopup==="Success" && 
+                <div className="fixed w-full top-40">
+                    <div className="m-auto flex flex-col w-[20vw] bg-white border-black border-[1px]">
+                        <div className="w-full bg-[#56754b] flex justify-center text-white p-1 text-xl"> Alert</div>
+
+                        <div className="p-1 text-black text-lg"> Form Submission Succession! {"\n"} Click OK to Continue.</div>
+
+                        <div className="flex justify-between p-2">
+                            <button className="mr-4 bg-green-400  h-10 border-[0.5px] p-2 px-4 hover:scale-105 rounded-lg shadow-xl" onClick={()=>handlePopupSuccess()}>OK</button>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            {showPopup==="Error" && 
+                <div className="fixed w-full top-40">
+                    <div className="m-auto flex flex-col w-[20vw] bg-white border-black border-[1px]">
+                        <div className="w-full bg-[#56754b] flex justify-center text-white p-1 text-xl"> Alert</div>
+
+                        <div className="p-1 text-red-500 text-lg"> {popupError}  {" \n"} Click OK to Continue.</div>
+
+                        <div className="flex justify-between p-2">
+                            <button className="mr-4 bg-green-400  h-10 border-[0.5px] p-2 px-4 hover:scale-105 rounded-lg shadow-xl" onClick={()=>handlePopupError()}>OK</button>
+                        </div>
+
+                    </div>
+                </div>
+            }
        
             <div className="flex w-full mt-10 overflow-y-hidden">
                 
