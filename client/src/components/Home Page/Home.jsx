@@ -66,7 +66,7 @@ export default function Home(){
             }
         } catch (error) {
             setPopupError('Failed to Fetch Images. \n This might indicate that there are no more images to show.')
-            setShowPopup('NoImages')
+            setShowPopup('Error')
             console.error("Failed to fetch images, using fallback images", error);
         }
     };
@@ -156,7 +156,7 @@ export default function Home(){
             })
             .catch(error => {
 
-                setPopupError('Error submitting form data:', error);
+                setPopupError('Error submitting form data: \n', error);
                 setShowPopup("Error")
             });
     };
@@ -229,20 +229,7 @@ export default function Home(){
                     </div>
                 </div>
             }
-            {showPopup==="NoImages" && 
-                <div className="fixed w-full top-40">
-                    <div className="m-auto flex flex-col w-[20vw] bg-white border-black border-[1px]">
-                        <div className="w-full bg-[#56754b] flex justify-center text-white p-1 text-xl"> Alert</div>
-
-                        <div className="p-1 text-red-500 text-lg"> {popupError}  {" \n"} Click OK to Continue.</div>
-
-                        <div className="flex justify-between p-2">
-                            <button className="mr-4 bg-green-400  h-10 border-[0.5px] p-2 px-4 hover:scale-105 rounded-lg shadow-xl" onClick={()=>handlePopupError()}>OK</button>
-                        </div>
-
-                    </div>
-                </div>
-            }
+            
        
             <div className="flex w-full mt-10 overflow-y-hidden">
                 
